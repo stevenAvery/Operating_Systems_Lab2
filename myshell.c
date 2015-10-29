@@ -70,7 +70,9 @@ int main(int argc, char *argv[])
 
         // Unsupported command
         } else {
-            fputs("Unsupported command, use help to display the manual\n", stderr);
+            unsopported_command(command, arg);
+
+            //fputs("Unsupported command, use help to display the manual\n", stderr);
         }
 
         printf("> ");

@@ -83,5 +83,36 @@ void echo(char *arg) {
 }
 
 void help() {
-    printf("this is the help, some more help. and helping");
+    // just hard coded
+    char *help_output = "printf 'cd <directory> - Change the current default directory to <directory>. If the <directory> argument is not present, report the current directory. If the directory does not exist an appropriate error should be reported. This command should also change the PWD environment variable.\n\nclr - Clear the screen.\n\ndir <directory> - List the contents of directory <directory>.\n\nenviron - List all the environment strings.\n\necho <comment> - Display <comment> on the display followed by a new line (multiple spaces/tabs may be reduced to a single space).\n\nhelp - Display the user manual using the more filter.\n\npause - Pause operation of the shell until 'Enter' is pressed.\n\nquit - Quit the shell.\n' | more";
+
+    system(help_output);
+}
+
+void unsopported_command(char *command, char *arg) {
+    pid_t PID = 0;
+    PID = fork();
+
+    if (PID == -1) {
+        fputs("Unable to create fork for command\n", stderr);
+        return;
+    }
+
+    if (PID == 0) {
+        char dir[BUFFER_LEN] = {0};
+        getcwd(dir, sizeof(dir));
+        strcpy(dir, "/myshell");
+
+        int return_execl;
+        // if an arg is empty don't use it
+        if (strcmp(arg, "") == 0)
+            return_execl = execl("/bin/ls", command, NULL);
+        // if no arg is populated use it
+        else
+            return_execl = execl("/bin/ls", command, arg, NULL);
+
+
+        printf("failed to exec command; returned %d\n", return_execl);
+        return;
+    }
 }

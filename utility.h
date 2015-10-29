@@ -14,17 +14,15 @@
 
 extern void tokenize(char *input, char **command, char **tokens);
 
+// command calls for question 1
 extern void cd(char *arg);
-
 extern void clr(void);
-
 extern void dir(char *arg);
-
 extern void environ();
-
 extern void echo(char *arg);
-
 extern void help();
+
+void unsopported_command(char *command, char *arg);
 
 
 #endif /* UTILITY_H_ */
