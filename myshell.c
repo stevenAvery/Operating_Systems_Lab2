@@ -19,7 +19,6 @@
 
 // Put global environment variables here
 
-
 int main(int argc, char *argv[])
 {
     // Input buffer and and commands
@@ -27,11 +26,23 @@ int main(int argc, char *argv[])
     char command[BUFFER_LEN] = { 0 };
     char arg[BUFFER_LEN] = { 0 };
 
-    // Parse the commands provided using argc and argv
+    // file input
+    // assume we want our input from stdin, unless otherwise stated
+    FILE *in_stream = stdin;
+    // if an argument was passed for an input file
+    if (argc > 1) {
+        // if we can, open and read from the input file
+        if (in_stream = fopen(argv[1], "r") == NULL) {
+            fputs("Unable to open file for input, resorting to stdin\n", stderr);
+            in_stream = stdin;
+        }
+    }
+
+
     printf("> ");
 
-    // Perform an infinite loop getting command input from users
-    while (fgets(buffer, BUFFER_LEN, stdin) != NULL) {
+    // Perform an infinite loop getting command input from input stream
+    while (fgets(buffer, BUFFER_LEN, in_stream) != NULL) {
         // Perform string tokenization to get the command and argument
         tokenize((char *)buffer, &command, &arg);
 
