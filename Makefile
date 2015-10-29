@@ -7,6 +7,9 @@ OBJECTS = $(subst .c,.o,$(SOURCES))
 EXE = myshell.exe
 .PHONY: clean help
 
+default:
+	$(CC) $(CFLAGS) $(SOURCES) $< $(LIBS) -o $(EXE)
+
 %.exe : %.o
 	$(CC) $(CFLAGS) $< $(LIBS) -o $@
 
