@@ -1,7 +1,7 @@
 /*
  * MyShell Project for SOFE 3950U / CSCI 3020U: Operating Systems
  *
- * Copyright (C) 2015, <GROUP MEMBERS>
+ * Copyright (C) 2015, 100493227
  * All rights reserved.
  *
  */
@@ -19,9 +19,6 @@
 
 // Put global environment variables here
 
-// Define functions declared in myshell.h here
-void tokenize(char *input, char **command, char **tokens);
-
 int main(int argc, char *argv[])
 {
     // Input buffer and and commands
@@ -29,55 +26,50 @@ int main(int argc, char *argv[])
     char command[BUFFER_LEN] = { 0 };
     char arg[BUFFER_LEN] = { 0 };
 
-    // Parse the commands provided using argc and argv
+    // file input
+    // assume we want our input from stdin, unless otherwise stated
+    FILE *in_stream = stdin;
+    // if an argument was passed for an input file
+    if (argc > 1) {
+        // if we can, open and read from the input file
+        if (in_stream = fopen(argv[1], "r") == NULL) {
+            fputs("Unable to open file for input, resorting to stdin\n", stderr);
+            in_stream = stdin;
+        }
+    }
+
+
     printf("> ");
 
-    // Perform an infinite loop getting command input from users
-    while (fgets(buffer, BUFFER_LEN, stdin) != NULL) {
+    // Perform an infinite loop getting command input from input stream
+    while (fgets(buffer, BUFFER_LEN, in_stream) != NULL) {
         // Perform string tokenization to get the command and argument
         tokenize((char *)buffer, &command, &arg);
 
         // Check the command and execute the operations for each command
         // cd command -- change the current directory
         if (strcmp(command, "cd") == 0) {
-            char cwd[BUFFER_LEN] = {0};
-            getcwd(cwd, sizeof(cwd));
-
-            if (strcmp(arg, "") == 0) { // print current directory if no arg is given
-                printf("%s\n", cwd);
-            } else {
-                chdir(arg);
-
-                // update the PWD environment var to match the current dir
-                strcat(cwd, "/");
-                strcat(cwd, arg);
-                setenv("PWD", cwd, 1);
-            }
+            cd(arg);
 
         // clr command -- clear the console
         } else if (strcmp(command, "clr") == 0) {
-            system("clear");
+            clr();
 
         // dir command -- list the contents of directory
         } else if (strcmp(command, "dir") == 0) {
-            char cmd[BUFFER_LEN] = {0};
-            strcpy(cmd, "ls ");
-            // if there is something in arg, pass it as a param to ls
-            if (strcmp(arg, "") != 0)
-                strcat(cmd, arg);
-
-            system(cmd);
+            dir(arg);
 
         // environ command -- list all the environment strings.
         } else if (strcmp(command, "environ") == 0) {
-            system("env");
+            environ();
 
         // echo command -- display comment, followed by newline
         } else if (strcmp(command, "echo") == 0) {
-            printf("%s\n", arg);
+            echo(arg);
 
         // help command -- display user manual
         } else if (strcmp(command, "help") == 0) {
+            help();
 
         // pause command -- pause the operation of the shell until Enter is pressed
         } else if (strcmp(command, "pause") == 0) {
@@ -89,36 +81,12 @@ int main(int argc, char *argv[])
 
         // Unsupported command
         } else {
-            fputs("Unsupported command, use help to display the manual\n", stderr);
+            unsopported_command(command, arg);
+
+            //fputs("Unsupported command, use help to display the manual\n", stderr);
         }
 
         printf("> ");
     }
     return EXIT_SUCCESS;
-}
-
-// tokenize the buffer
-void tokenize(char *input, char **command, char **tokens) {
-    // remove the '\n' from the input
-    char *clean_input;
-    if ((clean_input = strtok(input, "\n")) == NULL)
-        ; // err bad input
-
-    // take the first token as the command
-    char *command_str;
-    if ((command_str = strtok(clean_input, " ")) != NULL) {
-        strcpy((char*)command, command_str);
-    } else {
-        strcpy((char*)command, "");
-    }
-
-    // put the rest of the input in tokens
-    char *token_str;
-    if ((token_str = strtok(NULL, "")) != NULL) {
-        strcpy((char*)tokens, token_str);
-    } else {
-        strcpy((char*)tokens, "");
-    }
-
-    //*tokens = strtok(NULL, "");
 }
