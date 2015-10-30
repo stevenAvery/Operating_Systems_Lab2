@@ -16,10 +16,9 @@
 // Define your utility functions here, these will most likely be functions that you call
 // in your myshell.c source file
 
-#define BUFFER_LEN 256
 
 // tokenize the buffer
-void tokenize(char *buffer, char **command, char **tokens) {
+void tokenize(char *buffer, char *command[BUFFER_LEN], char *tokens[BUFFER_LEN]) {
     // remove the '\n' from the buffer
     char *clean_buffer;
     if ((clean_buffer = strtok(buffer, "\n")) == NULL)

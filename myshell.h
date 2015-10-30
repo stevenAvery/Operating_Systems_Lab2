@@ -8,4 +8,6 @@
 #ifndef MYSHELL_H_
 #define MYSHELL_H_
 
+void print_prompt(void);
+
 #endif /* MYSHELL_H_ */

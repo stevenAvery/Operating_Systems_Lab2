@@ -9,7 +9,9 @@
 #ifndef UTILITY_H_
 #define UTILITY_H_
 
-extern void tokenize(char *input, char **command, char **tokens);
+#define BUFFER_LEN 256
+
+extern void tokenize(char *input, char *command[BUFFER_LEN], char *tokens[BUFFER_LEN]);
 
 // command calls for question 1
 extern void cd(char *arg);
