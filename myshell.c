@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     // if an argument was passed for an input file
     if (argc > 1) {
         // if we can, open and read from the input file
-        if (in_stream = fopen(argv[1], "r") == NULL) {
+        if ((in_stream = fopen(argv[1], "r")) == NULL) {
             fputs("Unable to open file for input, resorting to stdin\n", stderr);
             in_stream = stdin;
         }
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 
         // environ command -- list all the environment strings.
         } else if (strcmp(command, "environ") == 0) {
-            environ();
+            environ(arg);
 
         // echo command -- display comment, followed by newline
         } else if (strcmp(command, "echo") == 0) {
@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 
         // help command -- display user manual
         } else if (strcmp(command, "help") == 0) {
-            help();
+            help(arg);
 
         // pause command -- pause the operation of the shell until Enter is pressed
         } else if (strcmp(command, "pause") == 0) {

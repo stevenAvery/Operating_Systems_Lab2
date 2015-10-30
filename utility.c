@@ -19,29 +19,27 @@
 #define BUFFER_LEN 256
 
 // tokenize the buffer
-void tokenize(char *input, char **command, char **tokens) {
-    // remove the '\n' from the input
-    char *clean_input;
-    if ((clean_input = strtok(input, "\n")) == NULL)
-        ; // err bad input
+void tokenize(char *buffer, char **command, char **tokens) {
+    // remove the '\n' from the buffer
+    char *clean_buffer;
+    if ((clean_buffer = strtok(buffer, "\n")) == NULL)
+        fputs("error: bad buffer, expected newline char\n", stderr);
 
     // take the first token as the command
     char *command_str;
-    if ((command_str = strtok(clean_input, " ")) != NULL) {
+    if ((command_str = strtok(clean_buffer, " ")) != NULL) {
         strcpy((char*)command, command_str);
     } else {
         strcpy((char*)command, "");
     }
 
-    // put the rest of the input in tokens
+    // put the rest of the buffer in tokens
     char *token_str;
     if ((token_str = strtok(NULL, "")) != NULL) {
         strcpy((char*)tokens, token_str);
     } else {
         strcpy((char*)tokens, "");
     }
-
-    //*tokens = strtok(NULL, "");
 }
 
 // cd command -- change the current directory
@@ -51,8 +49,9 @@ void cd(char *arg) {
     getcwd(cwd, sizeof(cwd));
 
     // if no arg is given just print current dir
-    if (strcmp(arg, "") == 0) { // print current directory if no arg is given
-        printf("%s\n", cwd);
+    if (strcmp(arg, "") == 0 || strstr(arg, ">") != NULL) {
+        strcat(cwd, arg); // incase of output redirection
+        echo(cwd);
 
     // if an arg is given, set the environment variable 'PWD'
     } else {
@@ -83,19 +82,33 @@ void dir(char *arg) {
 }
 
 // environ command -- list all the environment strings
-void environ() {
-    system("env");
+void environ(char *arg) {
+    char cmd[BUFFER_LEN] = {0};
+    strcpy(cmd, "env ");
+
+    if (strcmp(arg, "") != 0)
+        strcat(cmd, arg);
+
+    system(cmd);
 }
 
 // echo command -- display comment, followed by newline
 void echo(char *arg) {
-    printf("%s\n", arg);
+    char output_command[BUFFER_LEN] = "echo ";
+    strcat(output_command, arg);
+    system(output_command);
+    //strcat(arg, "\n");
+    //fputs(arg, stdout);
 }
 
 // help command -- display user manual
-void help() {
+void help(char *arg) {
     // just hard coded
-    char *help_output = "printf 'cd <directory> - Change the current default directory to <directory>. If the <directory> argument is not present, report the current directory. If the directory does not exist an appropriate error should be reported. This command should also change the PWD environment variable.\n\nclr - Clear the screen.\n\ndir <directory> - List the contents of directory <directory>.\n\nenviron - List all the environment strings.\n\necho <comment> - Display <comment> on the display followed by a new line (multiple spaces/tabs may be reduced to a single space).\n\nhelp - Display the user manual using the more filter.\n\npause - Pause operation of the shell until 'Enter' is pressed.\n\nquit - Quit the shell.\n' | more";
+    char help_output[701 + BUFFER_LEN] = {0};
+    strcat(help_output, "printf 'cd <directory> - Change the current default directory to <directory>. If the <directory> argument is not present, report the current directory. If the directory does not exist an appropriate error should be reported. This command should also change the PWD environment variable.\n\nclr - Clear the screen.\n\ndir <directory> - List the contents of directory <directory>.\n\nenviron - List all the environment strings.\n\necho <comment> - Display <comment> on the display followed by a new line (multiple spaces/tabs may be reduced to a single space).\n\nhelp - Display the user manual using the more filter.\n\npause - Pause operation of the shell until 'Enter' is pressed.\n\nquit - Quit the shell.\n' | more");
+
+    if (strcmp(arg, "") != 0)
+        strcat(help_output, arg);
 
     system(help_output);
 }
