@@ -8,6 +8,4 @@
 #ifndef MYSHELL_H_
 #define MYSHELL_H_
 
-extern void tokenize(char *input, char **command, char **tokens);
-
 #endif /* MYSHELL_H_ */
