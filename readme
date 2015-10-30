@@ -1,0 +1,20 @@
+myshell - Simple C Shell
+
+Description - myshell is a very simple Command Line Interpretor. It supports a few internal commands, also supports I/O redirection and background execution of programs.
+
+Internal Commands supported by the Shell:
+cd <directory> - Change the current default directory to <directory>. 
+clr - Clear the screen.
+dir <directory> - List the contents of directory <directory>.
+environ - List all the environment strings. 
+echo <comment> - Display <comment> on the display. 
+help - Display the user manual.
+pause -Pause operation of the shell until 'Enter' is pressed. 
+quit - Quit the shell.
+
+I/O redirection:
+Input redirection is a strategy to give the Command Line an input file instead of commands. Similarly, Output Redirection prints the output to a file instead of priniting it on the command line.
+The shell supports i/o redirection on either or both stdin and/or stdout. That is, the command line 'programname arg1 arg2 < inputfile > outputfile' will execute the program programname with arguments arg1 and arg2
+
+Background execution of programs:
+After launching a program command line prompt will return and the execution of the program is never stalled as along as an ampersand(&) is used at the end of the command line
