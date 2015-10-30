@@ -87,12 +87,12 @@ int main(int argc, char *argv[])
 
         print_prompt();
     }
-    
+
     return EXIT_SUCCESS;
 }
 
 // outputs the prompt with the current dir
-void print_prompt(void); {
+void print_prompt(void) {
     char cwd[BUFFER_LEN] = {0};
     getcwd(cwd, sizeof(cwd));
     strcat(cwd, " $ ");
