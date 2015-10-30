@@ -1,5 +1,5 @@
 CC = clang
-CFLAGS = -O -Wall -Wextra -std=c99
+CFLAGS = -O -Wall -Wextra -std=c99 -w
 LFLAGS =
 LIBS = -lm
 SOURCES = myshell.c utility.c

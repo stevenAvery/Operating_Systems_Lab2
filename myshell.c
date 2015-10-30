@@ -1,7 +1,7 @@
 /*
  * MyShell Project for SOFE 3950U / CSCI 3020U: Operating Systems
  *
- * Copyright (C) 2015, 100493227
+ * Copyright (C) 2015, 100493227, 100451291, 100462413, 100522340
  * All rights reserved.
  *
  */
@@ -15,9 +15,11 @@
 #include "myshell.h"
 
 // Put macros or constants here using #define
-#define BUFFER_LEN 256
 
 // Put global environment variables here
+
+// question 6
+void print_prompt(void);
 
 int main(int argc, char *argv[])
 {
@@ -38,8 +40,7 @@ int main(int argc, char *argv[])
         }
     }
 
-
-    printf("> ");
+    print_prompt();
 
     // Perform an infinite loop getting command input from input stream
     while (fgets(buffer, BUFFER_LEN, in_stream) != NULL) {
@@ -82,11 +83,18 @@ int main(int argc, char *argv[])
         // Unsupported command
         } else {
             unsopported_command(command, arg);
-
-            //fputs("Unsupported command, use help to display the manual\n", stderr);
         }
 
-        printf("> ");
+        print_prompt();
     }
+
     return EXIT_SUCCESS;
+}
+
+// outputs the prompt with the current dir
+void print_prompt(void) {
+    char cwd[BUFFER_LEN] = {0};
+    getcwd(cwd, sizeof(cwd));
+    strcat(cwd, " $ ");
+    printf("%s", cwd);
 }
